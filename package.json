@@ -1,6 +1,7 @@
 {
   "name": "task-manager-full-stack-app",
   "version": "1.0.0",
+  "private": true,
   "description": "",
   "workspaces": [
     "task-manager-backend"
