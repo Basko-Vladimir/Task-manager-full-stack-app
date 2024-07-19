@@ -6,6 +6,10 @@
   "workspaces": [
     "task-manager-backend"
   ],
+  "scripts": {
+    "lint": "eslint .",
+    "lint:fix": "pnpm run lint --fix"
+  },
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "^7.0.0",
     "@typescript-eslint/parser": "^7.0.0",

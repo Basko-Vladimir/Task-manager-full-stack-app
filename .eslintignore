@@ -1,0 +1,3 @@
+node_modules/
+task-manager-backend/prisma/generated
+dist/
