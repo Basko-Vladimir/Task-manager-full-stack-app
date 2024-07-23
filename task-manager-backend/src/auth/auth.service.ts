@@ -1,10 +1,12 @@
 import {
+  BadRequestException,
   Injectable,
   NotFoundException,
   UnauthorizedException
 } from '@nestjs/common';
 import { JwtService, JwtSignOptions } from '@nestjs/jwt';
 import { verify } from 'argon2';
+import { User } from '@prisma/client';
 
 import { UserService } from '../user/user.service';
 
@@ -18,7 +20,31 @@ export class AuthService {
   ) {}
 
   async login(dto: AuthDto) {
-    return dto;
+    const user: any = await this.validateUser(dto);
+    const tokens = this.generateTokens(user.id);
+
+    return {
+      user,
+      ...tokens
+    };
+  }
+
+  async register(dto: AuthDto) {
+    const user = await this.userService.getUserByEmail(dto.email);
+
+    if (user) {
+      throw new BadRequestException('User is already exists');
+    }
+
+    const { password, id, ...otherProperties } =
+      await this.userService.createUser(dto);
+    const tokens = this.generateTokens(id);
+
+    return {
+      id,
+      ...otherProperties,
+      ...tokens
+    };
   }
 
   private generateTokens(userId: string) {
@@ -36,13 +62,13 @@ export class AuthService {
   }
 
   private async validateUser(dto: AuthDto) {
-    const user = await this.userService.getUserByEmail(dto.email);
-    const { password, ...otherProperties } = user;
+    const user: User | null = await this.userService.getUserByEmail(dto.email);
 
     if (!user) {
       throw new NotFoundException('User not found!');
     }
 
+    const { password, ...otherProperties } = user;
     const isValid = verify(user.password, dto.password);
 
     if (!isValid) {

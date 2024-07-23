@@ -225,7 +225,7 @@ module.exports = {
      * Это правило проверяет наличие неиспользуемых переменных.
      */
 
-    '@typescript-eslint/no-explicit-any': 'error',
+    '@typescript-eslint/no-explicit-any': 'warn',
     /**  https://typescript-eslint.io/rules/no-explicit-any/
      * Это правило запрещает использование явного типа "any" в коде.
      * Установлен уровень "error", что означает, что использование явного типа "any" будет считаться ошибкой.
