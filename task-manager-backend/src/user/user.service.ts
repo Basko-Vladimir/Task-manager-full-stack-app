@@ -12,4 +12,10 @@ export class UserService {
       include: { tasks: true }
     });
   }
+
+  async getUserByEmail(email: string) {
+    return this.prismaService.user.findUnique({
+      where: { email }
+    });
+  }
 }
