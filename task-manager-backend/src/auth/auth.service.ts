@@ -7,6 +7,7 @@ import {
 import { JwtService, JwtSignOptions } from '@nestjs/jwt';
 import { verify } from 'argon2';
 import { User } from '@prisma/client';
+import { CookieOptions, Response } from 'express';
 
 import { UserService } from '../user/user.service';
 
@@ -18,6 +19,16 @@ export class AuthService {
     private jwtService: JwtService,
     private userService: UserService
   ) {}
+
+  EXPIRE_DAY_REFRESH_TOKEN = 1;
+  REFRESH_TOKEN_COOKIE_NAME = 'refreshToken';
+
+  defaultCookieSettings: CookieOptions = {
+    httpOnly: true,
+    domain: 'localhost',
+    secure: true,
+    sameSite: 'none' // if production --> lax'
+  };
 
   async login(dto: AuthDto) {
     const user: any = await this.validateUser(dto);
@@ -76,5 +87,38 @@ export class AuthService {
     }
 
     return otherProperties;
+  }
+
+  async getNewTokens(refreshToken: string) {
+    const result = await this.jwtService.verifyAsync(refreshToken);
+
+    if (!result) {
+      throw new UnauthorizedException('Invalid refresh token');
+    }
+
+    const { password, ...user } = await this.userService.getUserById(result.id);
+    const tokens = await this.generateTokens(result.id);
+
+    return {
+      user,
+      ...tokens
+    };
+  }
+
+  addRefreshTokenToResponse(res: Response, refreshToken: string) {
+    const expiresIn = new Date();
+
+    expiresIn.setDate(expiresIn.getDate() + this.EXPIRE_DAY_REFRESH_TOKEN);
+    res.cookie(this.REFRESH_TOKEN_COOKIE_NAME, refreshToken, {
+      ...this.defaultCookieSettings,
+      expires: expiresIn
+    });
+  }
+
+  removeRefreshTokenFromResponse(res: Response) {
+    res.cookie(this.REFRESH_TOKEN_COOKIE_NAME, '', {
+      ...this.defaultCookieSettings,
+      expires: new Date(0)
+    });
   }
 }
