@@ -46,7 +46,7 @@ model Task {
   updatedAt DateTime @updatedAt @map("updated_at")
 
   name String
-  priority Priority?
+  priority Priority
   isCompleted Boolean @default(false) @map("is_completed")
   userId String @map("user_id")
 
