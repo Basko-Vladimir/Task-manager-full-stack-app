@@ -4,13 +4,13 @@ import { Transform } from 'class-transformer';
 
 export class CreateTaskDto {
   @IsString()
-  name: string;
+    name: string;
 
   @IsOptional()
   @IsBoolean()
-  isCompleted?: boolean;
+    isCompleted?: boolean;
 
   @IsEnum(Priority)
   @Transform(({ value }) => String(value).toLowerCase())
-  priority: Priority;
+    priority: Priority;
 }

@@ -6,7 +6,6 @@
 
 generator client {
   provider = "prisma-client-js"
-  // output = "generated/client"
 }
 
 datasource db {
@@ -63,7 +62,7 @@ model TimeBlock {
   name String
   color String?
   duration Int
-  order Int @default(1)
+  order Int @default(0)
   userId String@map("user_id")
 
   user User @relation(fields: [userId], references: [id])

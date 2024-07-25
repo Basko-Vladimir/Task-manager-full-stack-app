@@ -11,30 +11,30 @@ import {
 export class UpdateUserDto {
   @IsOptional()
   @IsEmail()
-  email?: string;
+    email?: string;
 
   @IsOptional()
   @MinLength(6, { message: 'Password should beat least 6 characters' })
   @IsString()
-  password?: string;
+    password?: string;
 
   @IsOptional()
   @IsString()
-  name?: string;
+    name?: string;
 
   @IsOptional()
   @IsNumber()
   @Min(1)
-  workInterval?: number;
+    workInterval?: number;
 
   @IsOptional()
   @IsNumber()
   @Min(1)
-  breakInterval?: number;
+    breakInterval?: number;
 
   @IsOptional()
   @IsNumber()
   @Min(1)
   @Max(10)
-  intervalsCount?: number;
+    intervalsCount?: number;
 }
