@@ -1,5 +1,4 @@
 import { Injectable } from '@nestjs/common';
-import { TimeBlock } from '@prisma/client';
 
 import { PrismaService } from '../prisma.service';
 
