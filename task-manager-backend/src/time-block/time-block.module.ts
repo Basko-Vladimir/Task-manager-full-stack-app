@@ -2,8 +2,8 @@ import { Module } from '@nestjs/common';
 
 import { PrismaService } from '../prisma.service';
 
-import { TimeBlockService } from './time-block.service';
 import { TimeBlockController } from './time-block.controller';
+import { TimeBlockService } from './time-block.service';
 
 @Module({
   controllers: [TimeBlockController],
